@@ -1,7 +1,6 @@
 plugins {
 	id 'dev.architectury.loom-no-remap' version '1.17-SNAPSHOT' apply false
 	id 'dev.architectury.loom' version '1.17-SNAPSHOT' apply false
-	id 'com.github.hierynomus.license' version '0.16.1'
 }
 
 def parsed = sc.current.parsed
@@ -25,11 +24,25 @@ assert loader == (loom.platform.get() as String).toLowerCase()
 
 version = "v${project['mod.version']}-mc${mcVersion}-${loader}"
 
+group = project['mod.group']
+
 base {
 	archivesName = project['mod.id']
 }
 
 repositories {
+	maven {
+		url = 'https://maven.shedaniel.me/'
+		content {
+			includeGroup 'me.shedaniel.cloth'
+		}
+	}
+	maven {
+		url = 'https://maven.terraformersmc.com/releases/'
+		content {
+			includeModule 'com.terraformersmc', 'modmenu'
+		}
+	}
 	maven {
 		url = 'https://maven.parchmentmc.org'
 	}
@@ -65,8 +78,16 @@ dependencies {
 		}
 	}
 
+	compileOnly("me.shedaniel.cloth:cloth-config-${loader}:${project['deps.cloth_config']}") {
+		transitive = false
+	}
+
 	if (loader == 'fabric') {
+		compileOnly 'me.shedaniel.cloth:basic-math:0.6.1'
 		autoImplementation "net.fabricmc:fabric-loader:${project['deps.fabric_loader']}"
+		compileOnly("com.terraformersmc:modmenu:${project['deps.mod_menu']}") {
+			transitive = false
+		}
 	} else if (loader == 'forge') {
 		forge "net.minecraftforge:forge:${mcVersion}-${project['forge_version']}"
 	} else if (loader == 'neoforge') {
@@ -82,10 +103,12 @@ loom {
 
 	// https://docs.fabricmc.net/develop/loom/options#runs
 	def commonVmArgs = ['-Dmixin.debug.export=true', '-Dmixin.debug.countInjections=true']
-	runConfigs.all {
-		ideConfigGenerated(true)
-		vmArgs commonVmArgs
-		runDir = '../../run' // Shares the run directory between versions
+	runs {
+		client {
+			ideConfigGenerated(true)
+			vmArgs commonVmArgs
+			runDir = '../../run' // Shares the run directory between versions
+		}
 	}
 
 	if (loader == 'forge') {
@@ -137,8 +160,8 @@ processResources {
 	def all_files = [] as Set
 	[
 			'fabric'  : ['fabric.mod.json'],
-			'forge'   : ['META-INF', 'META-INF/mods.toml', 'pack.mcmeta'],
-			'neoforge': ['META-INF', 'META-INF/neoforge.mods.toml', 'pack.mcmeta'],
+			'forge'   : ['META-INF/mods.toml'],
+			'neoforge': ['META-INF/neoforge.mods.toml'],
 	].forEach { brand, paths ->
 		all_files.addAll(paths)
 		if (brand == loader) {
@@ -178,39 +201,3 @@ jar {
 		rename { "${it}_${inputs.properties.mod_id}" }
 	}
 }
-
-// https://github.com/hierynomus/license-gradle-plugin
-license {
-	// use "gradle licenseFormat" to apply license headers
-	header = rootProject.file('HEADER.txt')
-	include '**/*.java'
-	skipExistingHeaders = true
-
-	headerDefinitions {
-		// ref: https://github.com/mathieucarbou/license-maven-plugin/blob/4c42374bb737378f5022a3a36849d5e23ac326ea/license-maven-plugin/src/main/java/com/mycila/maven/plugin/license/header/HeaderType.java#L48
-		// modification: add a newline at the end
-		SLASHSTAR_STYLE_NEWLINE {
-			firstLine = '/*'
-			beforeEachLine = ' * '
-			endLine = ' */' + System.lineSeparator()
-			afterEachLine = ''
-			skipLinePattern = null
-			firstLineDetectionPattern = '(\\s|\\t)*/\\*.*$'
-			lastLineDetectionPattern = '.*\\*/(\\s|\\t)*$'
-			allowBlankLines = false
-			isMultiline = true
-			padLines = false
-		}
-	}
-	mapping {
-		java = 'SLASHSTAR_STYLE_NEWLINE'
-	}
-	ext {
-		name = project['mod.name']
-		author = 'As_One'
-		year = Calendar.getInstance().get(Calendar.YEAR).toString()
-	}
-}
-
-classes.dependsOn licenseFormatMain
-testClasses.dependsOn licenseFormatTest

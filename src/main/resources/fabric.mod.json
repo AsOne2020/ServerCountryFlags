@@ -2,32 +2,26 @@
   "schemaVersion": 1,
   "id": "${id}",
   "version": "${version}",
-
   "name": "${name}",
-  "description": "Template for my fabric mods",
-  "authors": [
-    "As_One"
-  ],
+  "description": "Shows the flag of where a server is located.",
+  "authors": ["Khajiitos"],
   "contact": {
-    "homepage": "https://modrinth.com",
-    "issues": "https://github.com/AsOne2020/stonecutter-template/issues",
-    "sources": "https://github.com/AsOne2020/stonecutter-template"
+    "homepage": "https://github.com/Khajiitos/ServerCountryFlags",
+    "sources": "https://github.com/Khajiitos/ServerCountryFlags"
   },
-  "license": "LGPLv3",
-  "icon": "assets/template/icon.png",
-
-  "environment": "*",
+  "license": "MIT",
+  "icon": "assets/servercountryflags/icon.png",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "me.asone.template.TemplateMod::fabricInit"
-    ]
+    "modmenu": ["me.khajiitos.servercountryflags.fabric.ModMenuApiImpl"]
   },
-  "mixins": [
-    "template.mixins.json"
-  ],
-
+  "mixins": ["servercountryflags.mixins.json"],
   "depends": {
-    "fabricloader": ">=0.11.4",
-    "minecraft": "${minecraft}"
+    "fabricloader": ">=0.18.2",
+    "minecraft": "${minecraft}",
+    "java": ">=25"
+  },
+  "suggests": {
+    "modmenu": "*"
   }
 }

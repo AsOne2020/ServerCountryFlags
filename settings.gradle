@@ -25,7 +25,7 @@ stonecutter {
 
 	create(rootProject) {
 		file('versions').listFiles { file ->
-			file.isDirectory() && !ignore.contains(file.name)
+			new File(file, 'gradle.properties').isFile() && !ignore.contains(file.name)
 		}.each { file ->
 			version(file.name, file.name.replaceFirst(/-[^-]+$/, ''))
 		}

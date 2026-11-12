@@ -1,25 +1,15 @@
-# Stonecutter Fabric template
-## Setup
-1. Review the supported Minecraft versions in `settings.gradle`.
-   For new entries, add `versions/.../gradle.properties` with the same keys as other versions.
-2. Change `mod.group`, `mod.id` and `mod.name` properties in `gradle.properties`.
-3. Rename `com.example` package in `src/main/java`.
-4. Rename `src/main/resources/template.mixins.json` to use your mod's id.
-5. Review the `LICENSE` file. 
-   See the [license decision diagram](https://docs.codeberg.org/getting-started/licensing/#license-decision-diagram) for common options.
-6. Review `src/main/resources/fabric.mod.json` to have up-to-date properties.
+# Server Country Flags
 
-## Usage
-- Use `"Set active project to ..."` Gradle tasks to update the Minecraft version
-  available in `src/` classes.
-- Use `buildAndCollect` Gradle task to store mod releases in `build/libs/`.
-- Enable `mod-publish-plugin` in `stonecutter.gradle` and `build.gradle`
-  and the corresponding code blocks to publish releases to Modrinth and Curseforge.
-- Enable `maven-publish` in `build.gradle` and the corresponding code block
-  to publish releases to a personal maven repository.
+Adds a flag to servers in the server list which tells where the server is located.
 
-## Useful links
-- [Stonecutter beginner's guide](https://stonecutter.kikugie.dev/wiki/start/): *spoiler: you* ***need*** *to understand how it works!*
-- [Fabric Discord server](https://discord.gg/v6v4pMv): for mod development help.
-- [Stonecutter Discord server](https://discord.kikugie.dev/): for Stonecutter and Gradle help.
-- [How To Ask Questions - the guide](http://www.catb.org/esr/faqs/smart-questions.html): also in [video form](https://www.youtube.com/results?search_query=How+To+Ask+Questions+The+Smart+Way).
+| Minecraft build target | Loaders |
+| --- | --- |
+| 26.1.2 | Fabric, NeoForge |
+| 26.2 | Fabric, NeoForge |
+| 26.3 | Fabric, NeoForge |
+
+## Build
+
+Use JDK 25 and run `./gradlew buildAndCollect` (`gradlew.bat buildAndCollect` on Windows). The build collects the six mod JARs in `build/libs/`.
+
+Original mod by [Khajiitos](https://github.com/Khajiitos/ServerCountryFlags), licensed under the MIT License.

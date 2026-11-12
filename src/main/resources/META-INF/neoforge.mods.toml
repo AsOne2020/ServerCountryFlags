@@ -1,25 +1,22 @@
 modLoader = "javafml"
 loaderVersion = "[1,)"
-license = "LGPLv3"
-issueTrackerURL = "https://github.com/AsOne2020/stonecutter-template/issues"
+license = "MIT"
 
 [[mods]]
 modId = "${id}"
 version = "${version}"
 displayName = "${name}"
-displayURL = "https://github.com/AsOne2020/stonecutter-template"
-authors = "As_One"
-description = '''
-Template for my neoforge mods
-'''
+displayURL = "https://github.com/Khajiitos/ServerCountryFlags"
+authors = "Khajiitos"
+description = "Shows the flag of where a server is located."
 logoFile = "icon.png"
 
 [[dependencies."${id}"]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "${minecraft}"
 ordering = "NONE"
-side = "BOTH"
+side = "CLIENT"
 
 [[mixins]]
-config = "${id}.mixins.json"
+config = "servercountryflags.mixins.json"
